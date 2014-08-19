@@ -13,6 +13,7 @@
 #include <linux/hugetlb.h>		/* hstate_index_to_shift	*/
 #include <linux/prefetch.h>		/* prefetchw			*/
 #include <linux/context_tracking.h>	/* exception_enter(), ...	*/
+#include <linux/efi.h>			/* fixup for buggy UEFI firmware*/
 
 #include <asm/traps.h>			/* dotraplinkage, ...		*/
 #include <asm/pgalloc.h>		/* pgd_*(), ...			*/
@@ -697,6 +698,13 @@ no_context(struct pt_regs *regs, unsigned long error_code,
 		return;
 
 	if (is_errata93(regs, address))
+		return;
+
+	/*
+	 * Try to fixup faults caused by illegal access to BOOT_SERVICES_*
+	 * regions by UEFI firmware.
+	 */
+	if (efi_boot_services_fixup(address))
 		return;
 
 	/*
