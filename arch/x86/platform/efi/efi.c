@@ -693,7 +693,7 @@ static void * __init efi_map_regions(int *count, int *pg_shift)
 	for (p = memmap.map; p < memmap.map_end; p += memmap.desc_size) {
 		md = p;
 		if (!(md->attribute & EFI_MEMORY_RUNTIME)) {
-#ifdef CONFIG_X86_64
+#if defined(CONFIG_X86_64) && !defined(CONFIG_EFI_BOOT_SERVICES_WARN)
 			if (md->type != EFI_BOOT_SERVICES_CODE &&
 			    md->type != EFI_BOOT_SERVICES_DATA)
 #endif
