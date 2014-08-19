@@ -1697,6 +1697,18 @@ config EFI_MIXED
 
 	   If unsure, say N.
 
+config EFI_BOOT_SERVICES_WARN
+	bool "Warn about illegal accesses to BOOT_SERVICES memory"
+	depends on EFI
+	---help---
+	   Enable this debug feature to make the kernel issue a warning if
+	   memory regions marked as EFI_BOOT_SERVICES_CODE/DATA are
+	   accessed after the kernel calls ExitBootServices() on the
+	   firmware. Please see the UEFI specification for details on
+	   the expectations of memory usage.
+
+	   If unsure, say N.
+
 config SECCOMP
 	def_bool y
 	prompt "Enable seccomp to safely compute untrusted bytecode"
