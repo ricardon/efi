@@ -283,6 +283,9 @@ int __init efi_mem_desc_lookup(u64 phys_addr, efi_memory_desc_t *out_md)
 
 		if (!(md->attribute & EFI_MEMORY_RUNTIME) &&
 		    md->type != EFI_BOOT_SERVICES_DATA &&
+#if defined(CONFIG_EFI_BOOT_SERVICES_WARN)
+		    md->type != EFI_BOOT_SERVICES_CODE &&
+#endif
 		    md->type != EFI_RUNTIME_SERVICES_DATA) {
 			early_memunmap(md, sizeof (*md));
 			continue;
